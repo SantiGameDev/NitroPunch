@@ -7,50 +7,43 @@ export const ctx = throwOnUndefined(
   () => new Error('Could not create CanvasRenderingContext2D')
 );
 
-interface Camera{
-  position: Vector2
-  get resolution(): Vector2
-  zoom: number
+const _position = Vector2.zero
+const _zoom = new Vector2([1, 1])
+const _resolution = new Vector2([canvas.clientWidth, canvas.clientHeight])
+
+interface Camera {
   Render(): void
+  get position(): Vector2
+  set position(zoom: Vector2): void
+  get zoom(): Vector2
+  set zoom(zoom: number | Vector2): void
+  get resolution(): Vector2
   WorldToScreenSpace(a: Vector2, out?: Vector2): Vector2
   ScreenToWorldSpace(a: Vector2, out?: Vector2): Vector2
 }
 
 const Camera: Camera = {
-  position: Vector2.zero,
-  get resolution(){return new Vector2([canvas.clientWidth, canvas.clientHeight])},
-  zoom: 1,
-  Render,
-
-  WorldToScreenSpace(a: Vector2, out: Vector2 = new Vector2): Vector2{
-    //       2a + res
-    // out = --------
-    //       2 * zoom
-
-    a.scale(2, out)
-    out.add(this.resolution)
-    out.scale(1 / this.zoom)
-    
-    return out
+  get position() { return _position },
+  set position(position: Vector2) { position.copy(_position) },
+  get zoom() { return _position },
+  set zoom(zoom: number | Vector2) {
+    const isNumber = typeof zoom == 'number'
+    if (isNumber) { _zoom.xy = [zoom, zoom] } else { zoom.copy(_zoom) }
   },
-
-  ScreenToWorldSpace(a: Vector2, out: Vector2 = new Vector2): Vector2{
-    //                   res
-    // out = a * scale - ---
-    //                    2
-
-    a.scale(this.zoom, out)
-    out.subtract(this.resolution.scale(1/2))
-
-    return out
-  },
+  get resolution(): Vector2
+  /**
+ * Converts coordi
+ * @constructor
+ * @param {string} title - The title of the book.
+ * @param {string} author - The author of the book.
+ */
 }
 
 export default Camera;
 
 const originalTransform = ctx.getTransform()
 
-function resizeCanvasToDisplaySize() {
+function resizeCanvasToDisplaySize(): boolean {
   // Lookup the size the browser is displaying the canvas in CSS pixels.
   const displayWidth = canvas.clientWidth;
   const displayHeight = canvas.clientHeight;
@@ -74,11 +67,11 @@ function resizeCanvasToDisplaySize() {
 function Render() {
   resizeCanvasToDisplaySize()
 
-  for(const object of Core.SceneObjects.Deref()){
+  for (const object of Core.SceneObjects.Deref()) {
     const topLeft = object.sprite.SizeAsVector()
-    .scale(object.scale/-2)
-    .add(object.position)
+      .scale(object.scale / -2)
+      .add(object.position)
 
-    
+
   }
 }

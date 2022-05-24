@@ -1,4 +1,4 @@
-import { Vector2 } from 'ts-vector-math';
+import { Vector2, Vector3, Vector4 } from 'ts-vector-math';
 import GameObject from './GameObject';
 
 interface MultilineTextNode {
@@ -22,7 +22,7 @@ export function multilineText(): MultilineTextNode {
   return node;
 }
 
-export type Constructor<T> = { new (...args: any): T };
+export type Constructor<T, P = any> = { new (...args: P): T };
 
 export type GameObjectRef = WeakRef<GameObject>;
 
@@ -41,6 +41,13 @@ export function throwOnUndefined<T>(
   } else {
     throw error();
   }
+}
+
+type VectorLike = Vector2 | Vector3 | Vector4
+
+function AssertVector<T extends VectorLike = Vector2>(value: T | number | ConstructorParameters<T>, type: Constructor<T, []>, out?: T): T
+{
+  out = out || new type()
 }
 
 export class MissingFeatureError extends Error {
