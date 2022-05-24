@@ -1,0 +1,17 @@
+{
+  "name": "nucleus-engine",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "ts-vector-math": "^1.6.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.7.0-dev.20220504",
+    "vite": "^2.9.8"
+  }
+}
