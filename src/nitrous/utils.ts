@@ -42,20 +42,3 @@ export function throwOnUndefined<T>(
     throw error();
   }
 }
-
-type VectorLike = Vector2 | Vector3 | Vector4
-
-function AssertVector<T extends VectorLike = Vector2>(value: T | number | ConstructorParameters<T>, type: Constructor<T, []>, out?: T): T
-{
-  out = out || new type()
-}
-
-export class MissingFeatureError extends Error {
-  constructor(feature: string, nickname?: string) {
-    super(
-      `${
-        nickname || feature
-      } is not supported on this browser (or platform). For supported browsers, visit https://caniuse.com/${feature}`
-    );
-  }
-}

@@ -3,7 +3,7 @@ import { GameObjectRef } from "./utils"
 
 const IDMap = new Map<ObjectID, GameObject>()
 
-const Objects = {
+const ObjectIndex = {
   Spawn(options: GameObjectOptions): GameObjectRef{
     const object = new GameObject(options)
 
@@ -61,4 +61,4 @@ const Objects = {
   }
 }
 
-export default Objects
+export default ObjectIndex

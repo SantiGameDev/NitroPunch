@@ -1,21 +1,21 @@
 import { Vector2 } from "ts-vector-math"
 
 export default class Sprite {
-  static async create(path: string){
+  static async load(path: string){
     const response = await fetch(path)
     const blob = await response.blob()
     const bitmap = await createImageBitmap(blob)
-    return new Sprite(path, bitmap)
+    return new Sprite(bitmap)
   }
 
-  private constructor(readonly path: string, readonly bitmap: ImageBitmap) {
-    ({width: this.width, height: this.height} = bitmap)
+  private constructor(readonly bitmap: ImageBitmap) {
+    const {width, height} = bitmap
+    this._size = new Vector2([width, height])
   }
 
-  readonly width: number
-  readonly height: number
+  private readonly _size: Vector2
 
-  SizeAsVector(){
-    return new Vector2([this.width, this.height])
+  GetSize(out?: Vector2){
+    return this._size.copy(out)
   }
 }

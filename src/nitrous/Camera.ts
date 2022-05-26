@@ -7,17 +7,16 @@ export const ctx = throwOnUndefined(
   () => new Error('Could not create CanvasRenderingContext2D')
 );
 
-const _position = Vector2.zero
-const _zoom = new Vector2([1, 1])
-const _resolution = new Vector2([canvas.clientWidth, canvas.clientHeight])
+const _position: Vector2 = Vector2.zero
+const _zoom: Vector2 = new Vector2([1, 1])
+const _resolution: Vector2 = new Vector2([canvas.clientWidth, canvas.clientHeight])
 
 interface Camera {
-  Render(): void
   get position(): Vector2
-  set position(zoom: Vector2): void
+  set position(zoom: Vector2)
   get zoom(): Vector2
-  set zoom(zoom: number | Vector2): void
-  get resolution(): Vector2
+  set zoom(zoom: Vector2)
+  GetResolution(out?: Vector2): Vector2
   WorldToScreenSpace(a: Vector2, out?: Vector2): Vector2
   ScreenToWorldSpace(a: Vector2, out?: Vector2): Vector2
 }
@@ -26,22 +25,17 @@ const Camera: Camera = {
   get position() { return _position },
   set position(position: Vector2) { position.copy(_position) },
   get zoom() { return _position },
-  set zoom(zoom: number | Vector2) {
-    const isNumber = typeof zoom == 'number'
-    if (isNumber) { _zoom.xy = [zoom, zoom] } else { zoom.copy(_zoom) }
+  set zoom(zoom: Vector2) { zoom.copy(_zoom) },
+  GetResolution(out?: Vector2): Vector2{ return _resolution.copy(out) },
+  WorldToScreenSpace(a: Vector2, out?: Vector2): Vector2{
+    return a.copy(out)
   },
-  get resolution(): Vector2
-  /**
- * Converts coordi
- * @constructor
- * @param {string} title - The title of the book.
- * @param {string} author - The author of the book.
- */
+  ScreenToWorldSpace(a: Vector2, out?: Vector2): Vector2{
+    return a.copy(out)
+  }
 }
 
 export default Camera;
-
-const originalTransform = ctx.getTransform()
 
 function resizeCanvasToDisplaySize(): boolean {
   // Lookup the size the browser is displaying the canvas in CSS pixels.
@@ -54,11 +48,8 @@ function resizeCanvasToDisplaySize(): boolean {
 
   if (needResize) {
     // Make the canvas the same size
-    canvas.width = displayWidth;
-    canvas.height = displayHeight;
-    ctx.setTransform(originalTransform)
-    //ctx.translate(Camera.resolution.x / 2, Camera.resolution.y / 2)
-    //ctx.translate(Camera.position.x, Camera.position.y)
+    _resolution.x = canvas.width = displayWidth;
+    _resolution.y = canvas.height = displayHeight;
   }
 
   return needResize;

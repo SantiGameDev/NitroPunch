@@ -1,6 +1,6 @@
-import Camera from "./nucleus/Camera";
-import Objects from "./nucleus/Objects";
-import Entry from "./scenes/Entry";
+import Camera from "./nitrous/Camera";
+import Objects from "./nitrous/ObjectIndex";
+import Entry from "./nitrous/Entry";
 
 function Update(){
   Objects.forEach(object => object.Update())
